@@ -18,7 +18,7 @@ class TicTacToeApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: seedColor),
         cardTheme: CardThemeData(
           elevation: 2,
-          shadowColor: seedColor.withOpacity(0.2),
+          shadowColor: seedColor.withValues(alpha: 0.2),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         ),
         filledButtonTheme: FilledButtonThemeData(
@@ -163,8 +163,8 @@ class _TicTacToePageState extends State<TicTacToePage> {
           gradient: LinearGradient(
             colors: [
               colorScheme.surface,
-              colorScheme.surfaceVariant.withOpacity(0.8),
-              colorScheme.primary.withOpacity(0.08),
+              colorScheme.surfaceContainerHighest.withValues(alpha: 0.8),
+              colorScheme.primary.withValues(alpha: 0.08),
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -235,7 +235,9 @@ class _TicTacToePageState extends State<TicTacToePage> {
                                 Container(
                                   padding: const EdgeInsets.all(10),
                                   decoration: BoxDecoration(
-                                    color: colorScheme.primary.withOpacity(0.12),
+                                    color: colorScheme.primary.withValues(
+                                      alpha: 0.12,
+                                    ),
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Icon(
@@ -369,7 +371,7 @@ class _ScoreCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: color.withOpacity(0.12),
+                color: color.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Icon(icon, color: color),
@@ -475,7 +477,7 @@ class _BoardTile extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     return Material(
       color: isWinner
-          ? accent.withOpacity(0.15)
+          ? accent.withValues(alpha: 0.15)
           : colorScheme.surfaceContainerHighest,
       borderRadius: BorderRadius.circular(14),
       child: InkWell(
