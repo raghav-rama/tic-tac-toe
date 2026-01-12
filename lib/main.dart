@@ -315,35 +315,43 @@ class _ScoreRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: _ScoreCard(
-            label: 'Player X',
-            value: xWins,
-            color: Theme.of(context).colorScheme.primary,
-            icon: Icons.close,
-          ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: _ScoreCard(
-            label: 'Draws',
-            value: draws,
-            color: Theme.of(context).colorScheme.tertiary,
-            icon: Icons.balance,
-          ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: _ScoreCard(
-            label: 'Player O',
-            value: oWins,
-            color: Theme.of(context).colorScheme.secondary,
-            icon: Icons.circle_outlined,
-          ),
-        ),
-      ],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isCompact = constraints.maxWidth < 420;
+        return Row(
+          children: [
+            Expanded(
+              child: _ScoreCard(
+                label: 'Player X',
+                value: xWins,
+                color: Theme.of(context).colorScheme.primary,
+                icon: Icons.close,
+                compact: isCompact,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: _ScoreCard(
+                label: 'Draws',
+                value: draws,
+                color: Theme.of(context).colorScheme.tertiary,
+                icon: Icons.balance,
+                compact: isCompact,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: _ScoreCard(
+                label: 'Player O',
+                value: oWins,
+                color: Theme.of(context).colorScheme.secondary,
+                icon: Icons.circle_outlined,
+                compact: isCompact,
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -354,35 +362,40 @@ class _ScoreCard extends StatelessWidget {
     required this.value,
     required this.color,
     required this.icon,
+    required this.compact,
   });
 
   final String label;
   final int value;
   final Color color;
   final IconData icon;
+  final bool compact;
 
   @override
   Widget build(BuildContext context) {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
-        child: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: color.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Icon(icon, color: color),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+        padding: compact
+            ? const EdgeInsets.symmetric(horizontal: 10, vertical: 14)
+            : const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
+        child: compact
+            ? Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: color.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Icon(icon, color: color),
+                  ),
+                  const SizedBox(height: 10),
                   Text(
                     label,
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.labelLarge?.copyWith(
                           color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
@@ -396,10 +409,48 @@ class _ScoreCard extends StatelessWidget {
                         ),
                   ),
                 ],
+              )
+            : Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: color.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Icon(icon, color: color),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          label,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurfaceVariant,
+                              ),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          value.toString(),
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineSmall
+                              ?.copyWith(
+                                fontWeight: FontWeight.w700,
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
-        ),
       ),
     );
   }
